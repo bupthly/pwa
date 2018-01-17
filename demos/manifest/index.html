@@ -5,4 +5,12 @@
 </head>
 <body>
   <h3>哈哈哈哈哈哈</h3>
+  <script>
+  if (navigator.serviceWorker != null) {
+    navigator.serviceWorker.register('sw.js')
+    .then(function(registration) {
+      console.log('Registered events at scope: ', registration.scope);
+    });
+  }
+</script>
 </body>
