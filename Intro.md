@@ -78,6 +78,7 @@
     问题：
     如果index.html想要更新，该如何处理？现在都是直接从service worker里读取缓存
     如何更新呢？
+    最大的坑，如何更新页面数据
 
     - 更新
 
@@ -100,7 +101,10 @@
 
 ## 推送通知（push notifications）
     1）push的工作原理
+
+    ![web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)
     
+    ![]('./images/push.svg');
     ServiceWorkerRegistration
 
 
