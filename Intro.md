@@ -1,5 +1,11 @@
 # 什么是pwa
 
+Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验，在安全、性能和体验三个方面都有很大的提升，即：
+
+- 可靠 - 即使在不稳定的网络环境下，也能瞬间加载并展现
+- 体验 - 快速响应，并且有平滑的动画响应用户的操作
+- 粘性 - 像设备上的原生应用，具有沉浸式的用户体验，用户可以添加到桌面
+
 # pwa特性
 
 - 离线缓存
@@ -52,18 +58,36 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 - 在service worker之前，也有一些其他的解决离线缓存的技术方案，比如AppCache，但是其他方案都存在一些问题，而service worker则在设计上避免了这些问题。
 
 ## 离线缓存
-### 数据流转
-### 普通的文件缓存
 
-1）离线缓存数据流转说明
-2）技术支持（service worker）https
-    - service worker是什么
+使用service worker缓存文件并拦截请求，提升离线体验
 
-        特点：
-        1）service worker是一个javascript worker，所以不能直接操作dom；如果需要的话，可以通过postMessage的方式，由页面来操作dom更新
-        2）网络代理，可以编码控制请求
-        3）不用的时候会被终止，用到的时候再启动
-        4）大量的用到promise
+```
+var cacheVersion = 'cache-v1';
+
+var cacheList = ['index.html'];
+
+self.addEventListener('install', e => {
+    e.waitUntil(
+        caches.open(cacheVersion)
+        .then(cache => cache.addAll(cacheList))
+        .then(() => self.skipWaiting())
+    )
+})
+self.addEventListener('activate', function(e) {
+    console.log('activate');
+})
+
+self.addEventListener('fetch', function(e) {
+    e.respondWith(
+        caches.match(e.request).then(function(response) {
+            if (response != null) {
+                return response
+            }
+            return fetch(e.request.url)
+        })
+    )
+})
+```
     - 生命周期
         service worker的生命周期与网页的生命周期完全不同，它是执行在浏览器层级的，由浏览器在后台运行。
         安装service worker需要先进行注册
@@ -138,8 +162,6 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
     
     拦截网络请求，通过程序控制响应缓存
     
-    离线存储
-
     这种离线存储方案与from cache这种的区别在哪儿？
 
     ？ websocket & webrtc 如何处理
@@ -215,57 +237,14 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 - theme_color: 主题颜色
 - background_color：开屏背景色
 - icons
-    将图标保存到主屏幕时，Chrome 首先寻找与显示密度匹配并且尺寸调整到 48dp 屏幕密度的图标。如果未找到任何图标，则会查找与设备特性匹配度最高的图标。无论出于任何原因，如果您想把目标明确锁定在具有特定像素密度的图标，可以使用带数字参数的可选 density 成员。如果您不声明密度，其默认值为 1.0。这意味着“可将该图标用于等于和大于 1.0 的屏幕密度”，而这通常就是您所需要的。
 
-### 注册安装service worker
+将图标保存到主屏幕时，Chrome 首先寻找与显示密度匹配并且尺寸调整到 48dp 屏幕密度的图标。如果未找到任何图标，则会查找与设备特性匹配度最高的图标。无论出于任何原因，如果您想把目标明确锁定在具有特定像素密度的图标，可以使用带数字参数的可选 density 成员。如果您不声明密度，其默认值为 1.0。这意味着“可将该图标用于等于和大于 1.0 的屏幕密度”，而这通常就是您所需要的。
 
-在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理，即是否监听了fetch事件
+** 说明 **
 
-```
-self.addEventListener('install', e => {
-    console.log('installed');
-})
-self.addEventListener('activate', function(e) {
-    console.log('activate');
-})
-self.addEventListener('fetch', function(e) {
-    console.log('fetch');
-})
-```
+在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理，即是否监听了fetch事件。因此，service worker是使用添加主屏功能的前提条件。
 
 demo演示
-
-使用service worker缓存文件并拦截请求，提升离线体验
-
-```
-var cacheVersion = 'cache-v1';
-
-var cacheList = ['index.html'];
-
-self.addEventListener('install', e => {
-    e.waitUntil(
-        caches.open(cacheVersion)
-        .then(cache => cache.addAll(cacheList))
-        .then(() => self.skipWaiting())
-    )
-})
-self.addEventListener('activate', function(e) {
-    console.log('activate');
-})
-
-self.addEventListener('fetch', function(e) {
-    e.respondWith(
-        caches.match(e.request).then(function(response) {
-            if (response != null) {
-                return response
-            }
-            return fetch(e.request.url)
-        })
-    )
-})
-```
-
-图：
 
 
 ### 为什么，如何理解
