@@ -10,12 +10,9 @@
 
 ## service worker
 
-![](./images/sw.png)
-
 ### 概述
 
 service worker是一个注册在指定源和路径下的事件驱动worker，运行在浏览器后台线程。它旨在创建更好的离线体验。
-
 
 Service workers 本质上充当Web应用程序与浏览器之间的代理服务器，也可以在网络可用时作为浏览器和网络间的代理。它们旨在（除其他之外）使得能够创建有效的离线体验，拦截网络请求并基于网络是否可用以及更新的资源是否驻留在服务器上来采取适当的动作。他们还允许访问推送通知和后台同步API。
 
@@ -25,11 +22,13 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 
 注意：Service workers之所以优于以前同类尝试（如AppCache），是因为它们无法支持当操作出错时终止操作。Service workers可以更细致地控制每一件事情。
 
-注意：Service workers大量使用Promise，因为通常它们会等待响应后继续，并根据响应返回一个成功或者失败的操作。Promise非常适合这种场景。
+![](./images/sw.png)
 
 ### 功能
 - 缓存文件和数据
 - 网络代理，拦截和处理网络请求
+
+![](./images/cache.png)
 
 ### 依赖
 - https
@@ -40,14 +39,17 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 
 ### 生命周期
 
-关于生命周期会在离线缓存部分详细说明
+- 下载（download）
+- 安装（install）
+- 激活（activate）
+
+关于生命周期会在离线缓存部分进行详细说明
 
 ### 其他说明
 
 - service worker中大部分场景是等待响应的结果，然后再进行下一步操作，因此大量使用了Promise。为了更好地理解service worker，需要先对promise有一定了解。
 
 - 在service worker之前，也有一些其他的解决离线缓存的技术方案，比如AppCache，但是其他方案都存在一些问题，而service worker则在设计上避免了这些问题。
-
 
 ## 离线缓存
 ### 数据流转
@@ -264,7 +266,7 @@ self.addEventListener('fetch', function(e) {
 ```
 
 图：
-![](./images/cache.png)
+
 
 ### 为什么，如何理解
 
