@@ -96,9 +96,83 @@
     1）push的工作原理
 
 ## 添加主屏
-    APP manifest 
-    启动动画
-    全屏、无浏览器导航条 
+
+### manifest.json简介：
+
+manifest文件中定义了应用的名称，显示方式，开屏背景色，主题色，应用图标等信息
+
+```
+{
+    "name": "Minimal app to try PWA",
+    "short_name": "Minimal PWA",
+    "display": "fullscreen",
+    "start_url": "/pwa/demos/manifest/index.html",
+    "theme_color": "#8888ff",
+    "background_color": "#aaaaff",
+    "icons": [
+        {
+            "src": "logo-36.png",
+            "sizes": "36x36",
+            "type": "image/png"
+        },
+        {
+            "src": "logo-48.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        },
+        {
+            "src": "logo-72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "logo-96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "logo-144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "logo-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}
+```
+
+说明：
+1）name
+2) short_name
+3) display
+4) theme_color
+5) background_color
+
+### 注册安装service worker
+
+在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理
+
+```
+self.addEventListener('install', e => {
+    console.log('installed');
+})
+self.addEventListener('activate', function(e) {
+    console.log('activate');
+})
+self.addEventListener('fetch', function(e) {
+    console.log('fetch');
+})
+```
+
+
+
+
+### 为什么，如何理解
+
+demo演示
 
 # 兼容性
 
