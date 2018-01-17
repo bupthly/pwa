@@ -23,3 +23,11 @@ self.addEventListener('fetch', function(e) {
         })
     )
 })
+
+self.addEventListener('push', function(e) {
+    if (e.data) {
+        console.log('This push event has data: ', e.data.text());
+    } else {
+        console.log('This push event has no data.');
+    }
+})
