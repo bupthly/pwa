@@ -1,8 +1,8 @@
 {
   "name": "Minimal app to try PWA",
   "short_name": "Minimal PWA",
-  "display": "minimal-ui",
-  "start_url": "/",
+  "display": "standalone",
+  "start_url": "/index.html",
   "theme_color": "#8888ff",
   "background_color": "#aaaaff",
   "icons": [
