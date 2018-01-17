@@ -105,7 +105,7 @@
 
 ![web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)
     
-![]('./images/push.svg');
+![]('./images/push.svg')
     
 ServiceWorkerRegistration
 
