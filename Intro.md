@@ -100,12 +100,14 @@
     https://developer.mozilla.org/en-US/Apps/Fundamentals/Basic_data_flow
 
 ## 推送通知（push notifications）
-    1）push的工作原理
 
-    ![web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)
+1）push的工作原理
+
+![web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)
     
-    ![]('./images/push.svg');
-    ServiceWorkerRegistration
+![]('./images/push.svg');
+    
+ServiceWorkerRegistration
 
 
 ## 添加主屏
