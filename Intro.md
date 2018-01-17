@@ -167,7 +167,40 @@ self.addEventListener('fetch', function(e) {
 })
 ```
 
+demo演示
 
+使用service worker缓存文件并拦截请求，提升离线体验
+
+```
+var cacheVersion = 'cache-v1';
+
+var cacheList = ['index.html'];
+
+self.addEventListener('install', e => {
+    e.waitUntil(
+        caches.open(cacheVersion)
+        .then(cache => cache.addAll(cacheList))
+        .then(() => self.skipWaiting())
+    )
+})
+self.addEventListener('activate', function(e) {
+    console.log('activate');
+})
+
+self.addEventListener('fetch', function(e) {
+    e.respondWith(
+        caches.match(e.request).then(function(response) {
+            if (response != null) {
+                return response
+            }
+            return fetch(e.request.url)
+        })
+    )
+})
+```
+
+图：
+![](./images/cache.png)
 
 
 ### 为什么，如何理解
