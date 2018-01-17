@@ -10,6 +10,8 @@
 
 ## service worker
 
+![](./images/sw.png)
+
 ### 概述
 
 service worker是一个注册在指定源和路径下的事件驱动worker，运行在浏览器后台线程。它旨在创建更好的离线体验。
