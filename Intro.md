@@ -94,6 +94,9 @@
 
 ## 推送通知（push notifications）
     1）push的工作原理
+    
+    ServiceWorkerRegistration
+
 
 ## 添加主屏
 
@@ -150,6 +153,8 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 3) display
 4) theme_color
 5) background_color
+6）icons
+    将图标保存到主屏幕时，Chrome 首先寻找与显示密度匹配并且尺寸调整到 48dp 屏幕密度的图标。如果未找到任何图标，则会查找与设备特性匹配度最高的图标。无论出于任何原因，如果您想把目标明确锁定在具有特定像素密度的图标，可以使用带数字参数的可选 density 成员。如果您不声明密度，其默认值为 1.0。这意味着“可将该图标用于等于和大于 1.0 的屏幕密度”，而这通常就是您所需要的。
 
 ### 注册安装service worker
 
@@ -201,7 +206,6 @@ self.addEventListener('fetch', function(e) {
 
 图：
 ![](./images/cache.png)
-
 
 ### 为什么，如何理解
 

@@ -1,0 +1,27 @@
+<head>
+  <title>测试push</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body>
+  <h3>推送通知</h3>
+  <script>
+  function subscribeUserToPush() {
+    return navigator.serviceWorker.register('sw.js')
+    .then(function(registration) {
+      const subscribeOptions = {
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(
+          'BHcK0of8aLDKGxO_SwRmRuWKj5Gi7eSjGtoZMwe8amTSv_nL-fLXklarCFW2dy5S5E80kAwrr6c0XFKTkeULSpM'
+        )
+      };
+
+      return registration.pushManager.subscribe(subscribeOptions);
+    })
+    .then(function(pushSubscription) {
+      console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+      return pushSubscription;
+    });
+  }
+</script>
+</body>
