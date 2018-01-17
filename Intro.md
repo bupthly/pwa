@@ -6,7 +6,26 @@
 - 推送通知（push notifications）
 - 添加主屏
 
+以上三种特性都基于service worker技术实现，因此，在介绍这三个特性之前，我们先来了解一下service worker。
+
+## service worker
+
+### 是什么
+
+### 做什么
+- 缓存文件和数据
+- 网络代理，拦截和处理网络请求
+
+### 需要什么
+- https
+由于service worker可以对网络请求进行拦截、改写等操作，相当于一个代理，为了保证安全性，必须要使用https协议
+- browser
+目前
+
 ## 离线缓存
+### 数据流转
+### 普通的文件缓存
+
 1）离线缓存数据流转说明
 2）技术支持（service worker）https
     - service worker是什么
@@ -170,7 +189,7 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 
 ### 注册安装service worker
 
-在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理
+在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理，即是否监听了fetch事件
 
 ```
 self.addEventListener('install', e => {
