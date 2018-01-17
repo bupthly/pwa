@@ -59,6 +59,27 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 
 ## 离线缓存
 
+上文提到，sw生命周期中包含下载、安装、激活三个阶段：
+
+- 当在页面中注册一个sw时，会立即下载该sw文件
+```
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            // Registration was successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+            // registration failed :(
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+}
+```
+注册成功后，可以拿到一个ServiceWorkerRegistration对象，该对象包含sw的相关信息，包括所属的域等。
+
+- 下载完成后，浏览器会install该sw，sw的install事件会被触发，通常情况下，我们会在install时间中做一些针对静态资源文件的缓存处理
+
+
 使用service worker缓存文件并拦截请求，提升离线体验
 
 ```
@@ -88,6 +109,10 @@ self.addEventListener('fetch', function(e) {
     )
 })
 ```
+
+既然我们可以对文件进行缓存，那也就必然面临缓存失效的问题，更新被service worker缓存的静态文件，必须通过更新service worker的方法来解决。
+
+
     - 生命周期
         service worker的生命周期与网页的生命周期完全不同，它是执行在浏览器层级的，由浏览器在后台运行。
         安装service worker需要先进行注册
@@ -110,17 +135,7 @@ self.addEventListener('fetch', function(e) {
 
     - 注册
     
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                    // Registration was successful
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, function(err) {
-                    // registration failed :(
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
+        
 
         1) service worker 作用域
         2）chrome://inspect/#service-workers 监控
