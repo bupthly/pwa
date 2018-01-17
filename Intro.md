@@ -38,6 +38,8 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 
 ### 生命周期
 
+关于生命周期会在离线缓存部分详细说明
+
 ### 其他说明
 
 - service worker中大部分场景是等待响应的结果，然后再进行下一步操作，因此大量使用了Promise。为了更好地理解service worker，需要先对promise有一定了解。
@@ -162,7 +164,7 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 {
     "name": "Minimal app to try PWA",
     "short_name": "Minimal PWA",
-    "display": "fullscreen",
+    "display": "standalone",
     "start_url": "/pwa/demos/manifest/index.html",
     "theme_color": "#8888ff",
     "background_color": "#aaaaff",
@@ -201,13 +203,14 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 }
 ```
 
-说明：
-1）name
-2) short_name
-3) display
-4) theme_color
-5) background_color
-6）icons
+*说明：*
+
+- name：开屏效果上显示的名字
+- short_name：保存到主屏幕上时显示的名字
+- display：展示方式，全屏还是普通浏览器方式
+- theme_color: 主题颜色
+- background_color：开屏背景色
+- icons
     将图标保存到主屏幕时，Chrome 首先寻找与显示密度匹配并且尺寸调整到 48dp 屏幕密度的图标。如果未找到任何图标，则会查找与设备特性匹配度最高的图标。无论出于任何原因，如果您想把目标明确锁定在具有特定像素密度的图标，可以使用带数字参数的可选 density 成员。如果您不声明密度，其默认值为 1.0。这意味着“可将该图标用于等于和大于 1.0 的屏幕密度”，而这通常就是您所需要的。
 
 ### 注册安装service worker
