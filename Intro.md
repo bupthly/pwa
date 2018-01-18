@@ -40,8 +40,7 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 - https
 由于service worker可以对网络请求进行拦截、改写等操作，出于安全考量，Service workers只能由HTTPS承载。
 - browser
-在Firefox浏览器的用户隐私模式，Service Worker不可用。
-目前
+
 
 ### 生命周期
 
@@ -120,7 +119,15 @@ self.addEventListener('fetch', function(e) {
 
 静态资源文件更新了怎么处理？
 
-<img src="./images/wen.png" width="100px" height="60px">
+<img src="./images/wen.png" width="200px" height="120px">
+
+### service worker更新机制
+
+### 开发与调试利器
+
+### 问题：
+
+- websocket & webrtc 如何处理
 
 既然我们可以对文件进行缓存，那也就必然面临缓存失效的问题，更新被service worker缓存的静态文件，必须通过更新service worker的方法来解决。
 
@@ -134,10 +141,6 @@ self.addEventListener('fetch', function(e) {
         install完成后，会触发activition，在activation步骤我们可以管理旧的缓存
 
         首次加载的页面，还不会受service worker的控制；只有二次加载的页面，才会被控制
-
-        要求：
-        https
-        浏览器（chrome、firefox等）
 
         1）首次
         2）更新
@@ -187,8 +190,6 @@ self.addEventListener('fetch', function(e) {
     拦截网络请求，通过程序控制响应缓存
     
     这种离线存储方案与from cache这种的区别在哪儿？
-
-    ？ websocket & webrtc 如何处理
 
     app cache 和 indexedDB API
     https://developer.mozilla.org/en-US/Apps/Fundamentals/Basic_data_flow
@@ -264,12 +265,11 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 
 将图标保存到主屏幕时，Chrome 首先寻找与显示密度匹配并且尺寸调整到 48dp 屏幕密度的图标。如果未找到任何图标，则会查找与设备特性匹配度最高的图标。无论出于任何原因，如果您想把目标明确锁定在具有特定像素密度的图标，可以使用带数字参数的可选 density 成员。如果您不声明密度，其默认值为 1.0。这意味着“可将该图标用于等于和大于 1.0 的屏幕密度”，而这通常就是您所需要的。
 
-** 说明 **
+**说明**
 
 在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理，即是否监听了fetch事件。因此，service worker是使用添加主屏功能的前提条件。
 
 demo演示
-
 
 ### 为什么，如何理解
 
@@ -277,7 +277,13 @@ demo演示
 
 # 兼容性
 
-# 发展
+![](./images/support.png)
+
+更细节的支持可以在![Is Service Worker Ready](https://jakearchibald.github.io/isserviceworkerready/#service-worker-enthusiasm)查看
+
+# 业界观点
+
+目前，业界对于pwa的看法主要分为两派：
 
 # 参考资料
 
