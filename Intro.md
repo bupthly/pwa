@@ -119,7 +119,8 @@ self.addEventListener('fetch', function(e) {
 ```
 
 静态资源文件更新了怎么处理？
-![](./images/wen.jpg)
+
+<img src="./images/wen.png" width="100px" height="60px">
 
 既然我们可以对文件进行缓存，那也就必然面临缓存失效的问题，更新被service worker缓存的静态文件，必须通过更新service worker的方法来解决。
 
