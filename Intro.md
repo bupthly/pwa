@@ -197,8 +197,6 @@ self.addEventListener('fetch', function(e) {
 
 ### push的工作机制
 
-[web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)
-    
 #### step1
 
 - 获取用户对于notification的授权
@@ -215,7 +213,7 @@ self.addEventListener('fetch', function(e) {
 
 简单介绍一下push service：
 
-push service会接收网络请求，并对其进行校验，校验通过后，会给指定的浏览器推送一条消息。如果该浏览器是离线状态，这条消息会被存起来知道浏览器在线，再发送给浏览器。对于我们来说，无需关心到底使用的什么push service，只要保证按照协议发起正确的请求即可。
+push service会接收网络请求，并对其进行校验，校验通过后，会给指定的浏览器推送一条消息。如果该浏览器是离线状态，这条消息会被存起来知道浏览器在线，再发送给浏览器。对于我们来说，无需关心到底使用的什么push service，只要保证按照协议[web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)发起正确的请求即可。
 
 ```
  {"endpoint":"https://fcm.googleapis.com/fcm/send/elUUKjDMaOU:APA91bHTB6-7Bi9y_tTerk1zDLJ4LM9gap-Piyx5J2xQtBhpKrhNQueBq_-aA6KoH_-b0kWqR89Kthv_cZFGFJKkP47hq3b3MREqCLEth6WyhFljT4i206SIm60uBC20xpxj-C4xE-cf","expirationTime":null,"keys":{"p256dh":"BHMdMIHjLgkExjjiRlNYm5LLvS5_iVFJm9D-8-UKkoN3d8eo2vYOaQxhBHV_njD-M6zNr4davOffk5z63RiDy9Y=","auth":"JjwOuSFX5K051OCJSz2Igw=="}}
@@ -235,23 +233,34 @@ push service会接收网络请求，并对其进行校验，校验通过后，�
 
 ```
 function subscribeUserToPush() {
-  return navigator.serviceWorker.register('service-worker.js')
-  .then(function(registration) {
-    const subscribeOptions = {
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(
-        'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U'
-      )
-    };
+    return navigator.serviceWorker.register('service-worker.js')
+    .then(function(registration) {
+        const subscribeOptions = {
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(
+            'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U')
+        };
 
-    return registration.pushManager.subscribe(subscribeOptions);
-  })
-  .then(function(pushSubscription) {
-    console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
-    return pushSubscription;
-  });
+        return registration.pushManager.subscribe(subscribeOptions);
+    })
+    .then(function(pushSubscription) {
+        console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+        return pushSubscription;
+    });
 }
 ```
+
+```
+self.addEventListener('push', function(e) {
+    if (e.data) {
+        console.log('This push event has data: ', e.data.text());
+    } else {
+        console.log('This push event has no data.');
+    }
+})
+```
+
+demo
 
 ## 添加主屏
 
