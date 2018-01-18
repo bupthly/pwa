@@ -20,19 +20,16 @@ Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法�
 
 service worker是一个注册在指定源和路径下的事件驱动worker，运行在浏览器后台线程。它旨在创建更好的离线体验。
 
-Service workers 本质上充当Web应用程序与浏览器之间的代理服务器，也可以在网络可用时作为浏览器和网络间的代理。它们旨在（除其他之外）使得能够创建有效的离线体验，拦截网络请求并基于网络是否可用以及更新的资源是否驻留在服务器上来采取适当的动作。他们还允许访问推送通知和后台同步API。
-
-Service worker。它采用JavaScript控制关联的页面或者网站，拦截并修改访问和资源请求，细粒度地缓存资源。你可以完全控制应用在特定情形（最常见的情形是网络不可用）下的表现。
+Service workers 本质上充当Web应用程序与浏览器之间的代理服务器，也可以在网络可用时作为浏览器和网络间的代理，它采用JavaScript控制关联的页面或者网站，拦截并修改访问和资源请求，细粒度地缓存资源，可以是开发者能够控制应用在无网情况下的表现。另外，service worker还允许访问推送通知和后台同步API。
 
 Service worker运行在worker上下文，因此它不能访问DOM。相对于驱动应用的主JavaScript线程，它运行在其他线程中，所以不会造成阻塞。它设计为完全异步，同步API（如XHR和localStorage）不能在service worker中使用。
-
-注意：Service workers之所以优于以前同类尝试（如AppCache），是因为它们无法支持当操作出错时终止操作。Service workers可以更细致地控制每一件事情。
 
 ![](./images/sw.png)
 
 ### 功能
 - 缓存文件和数据
 - 网络代理，拦截和处理网络请求
+- 允许推送通知
 
 ![](./images/cache.png)
 
@@ -84,7 +81,7 @@ if ('serviceWorker' in navigator) {
 
 如上图所示，实现离线缓存主要是对install和fetch两个事件的监听。
 
-sw文件下载完成后，浏览器会install该sw，sw的install事件会被触发，通常情况下，我们会在install事件中做一些针对静态资源文件的缓存处理。通过监听fetch事件，对于每个请求，可以返回缓存中的数据，或者从服务器拉取最新的数据并返回。
+sw文件下载完成后，会触发sw的install事件，通常情况下，我们会在install事件中做一些针对静态资源文件的缓存处理。通过监听fetch事件，对于每个请求，可以返回缓存中的数据，或者从服务器拉取最新的数据并返回。
 
 举个🌰：
 
@@ -117,7 +114,26 @@ self.addEventListener('fetch', function(e) {
 })
 ```
 
-从这个例子中可以看到，在sw的受控页面中，当页面请求加载index.html文件时，service worker拦截到了该请求，并从cache中读取数据作为结果返回。这样会造成一个问题：假如我们更新了index.html文件，用户看到的却还是之前的。
+从这个例子中可以看到，在sw的受控页面中，当页面请求加载index.html文件时，service worker拦截到了该请求，并从cache中读取数据作为结果返回。
+
+**首次请求和二次请求**
+
+首次加载的页面，还不会受service worker的控制；只有二次加载的页面，才会被控制
+
+1）首次
+
+2）更新
+
+3）一次只能运行一个版本，如何保证，什么机制（在开发时会导致一些问题，通过devTools解决）
+
+4）开发利器
+
+5）处理更新
+
+
+
+
+这样会造成一个问题：假如我们更新了index.html文件，用户看到的却还是之前的。
 
 数据更新了怎么处理？
 
@@ -133,7 +149,6 @@ self.addEventListener('fetch', function(e) {
 
 既然我们可以对文件进行缓存，那也就必然面临缓存失效的问题，更新被service worker缓存的静态文件，必须通过更新service worker的方法来解决。
 
-
     - 生命周期
         service worker的生命周期与网页的生命周期完全不同，它是执行在浏览器层级的，由浏览器在后台运行。
         安装service worker需要先进行注册
@@ -141,14 +156,6 @@ self.addEventListener('fetch', function(e) {
         在install阶段，可以缓存一些静态资源。如果所有的静态资源都缓存成功，service worker就会install成功。如果有任意一个文件没能下载或者缓存成功，install就不会成功
 
         install完成后，会触发activition，在activation步骤我们可以管理旧的缓存
-
-        首次加载的页面，还不会受service worker的控制；只有二次加载的页面，才会被控制
-
-        1）首次
-        2）更新
-        3）一次只能运行一个版本，如何保证，什么机制（在开发时会导致一些问题，通过devTools解决）
-        4）开发利器
-        5）处理更新
 
     - 注册       
         1) service worker 作用域
@@ -182,16 +189,9 @@ self.addEventListener('fetch', function(e) {
     最大的坑，如何更新页面数据
 
     - 更新
-
-
-
     - 加载更快
     - 数据流
     - 关闭浏览器后是否仍然可以运行
-    
-    拦截网络请求，通过程序控制响应缓存
-    
-    这种离线存储方案与from cache这种的区别在哪儿？
 
     app cache 和 indexedDB API
     https://developer.mozilla.org/en-US/Apps/Fundamentals/Basic_data_flow
