@@ -196,14 +196,43 @@ self.addEventListener('fetch', function(e) {
 
 ## 推送通知（push notifications）
 
-1）push的工作原理
+### push的工作机制
 
-![web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)
+[web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)
     
-![]('./images/push.svg')
-    
-ServiceWorkerRegistration
+#### step1
 
+![](./images/push-step1.png)
+
+#### step2
+
+![](./images/push-step2.png)
+
+#### step3
+
+![](./images/push-step3.png)
+    
+### 具体实现及demo演示
+
+```
+function subscribeUserToPush() {
+  return navigator.serviceWorker.register('service-worker.js')
+  .then(function(registration) {
+    const subscribeOptions = {
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(
+        'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U'
+      )
+    };
+
+    return registration.pushManager.subscribe(subscribeOptions);
+  })
+  .then(function(pushSubscription) {
+    console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+    return pushSubscription;
+  });
+}
+```
 
 ## 添加主屏
 
@@ -279,7 +308,7 @@ demo演示
 
 ![](./images/support.png)
 
-更细节的支持可以在![Is Service Worker Ready](https://jakearchibald.github.io/isserviceworkerready/#service-worker-enthusiasm)查看
+更细节的支持可以在[Is Service Worker Ready](https://jakearchibald.github.io/isserviceworkerready/#service-worker-enthusiasm)查看
 
 # 业界观点
 
