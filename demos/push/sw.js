@@ -9,6 +9,7 @@ self.addEventListener('install', e => {
         .then(() => self.skipWaiting())
     )
 })
+
 self.addEventListener('activate', function(e) {
     console.log('activate');
 })

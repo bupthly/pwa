@@ -130,9 +130,6 @@ self.addEventListener('fetch', function(e) {
 
 5）处理更新
 
-
-
-
 这样会造成一个问题：假如我们更新了index.html文件，用户看到的却还是之前的。
 
 数据更新了怎么处理？
@@ -204,13 +201,33 @@ self.addEventListener('fetch', function(e) {
     
 #### step1
 
+- 获取用户对于notification的授权
+- 拿到设备的ID，用于区分不同设备（PushSubscription）
+- 把这个信息发送给服务器
+
+简单来说就是，客户端同意接受来自服务器的推送，然后告诉服务器自己是谁。如下图所示：
+
 ![](./images/push-step1.png)
 
 #### step2
 
+当服务器端获取到设备的ID后，就可以向其推送消息。服务器需要向push service发请求，告知push service希望将数据推送给谁，推送什么数据等信息。
+
+简单介绍一下push service：
+
+push service会接收网络请求，并对其进行校验，校验通过后，会给指定的浏览器推送一条消息。如果该浏览器是离线状态，这条消息会被存起来知道浏览器在线，再发送给浏览器。对于我们来说，无需关心到底使用的什么push service，只要保证按照协议发起正确的请求即可。
+
+```
+ {"endpoint":"https://fcm.googleapis.com/fcm/send/elUUKjDMaOU:APA91bHTB6-7Bi9y_tTerk1zDLJ4LM9gap-Piyx5J2xQtBhpKrhNQueBq_-aA6KoH_-b0kWqR89Kthv_cZFGFJKkP47hq3b3MREqCLEth6WyhFljT4i206SIm60uBC20xpxj-C4xE-cf","expirationTime":null,"keys":{"p256dh":"BHMdMIHjLgkExjjiRlNYm5LLvS5_iVFJm9D-8-UKkoN3d8eo2vYOaQxhBHV_njD-M6zNr4davOffk5z63RiDy9Y=","auth":"JjwOuSFX5K051OCJSz2Igw=="}}
+```
+
+如上是一个PushSubscription的详细数据，其中endpoint是该浏览器所用的push service的地址。
+
 ![](./images/push-step2.png)
 
 #### step3
+
+当浏览器收到来自push service的消息后，会唤起service worker，service worker监听到push事件，拿到推送的数据，并提示给用户。如图所示：
 
 ![](./images/push-step3.png)
     
@@ -285,7 +302,7 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 }
 ```
 
-*说明：*
+**说明:**
 
 - name：开屏效果上显示的名字
 - short_name：保存到主屏幕上时显示的名字
@@ -296,7 +313,7 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 
 将图标保存到主屏幕时，Chrome 首先寻找与显示密度匹配并且尺寸调整到 48dp 屏幕密度的图标。如果未找到任何图标，则会查找与设备特性匹配度最高的图标。无论出于任何原因，如果您想把目标明确锁定在具有特定像素密度的图标，可以使用带数字参数的可选 density 成员。如果您不声明密度，其默认值为 1.0。这意味着“可将该图标用于等于和大于 1.0 的屏幕密度”，而这通常就是您所需要的。
 
-**说明**
+**注意**
 
 在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理，即是否监听了fetch事件。因此，service worker是使用添加主屏功能的前提条件。
 
