@@ -120,15 +120,9 @@ self.addEventListener('fetch', function(e) {
 
 首次加载的页面，还不会受service worker的控制；只有二次加载的页面，才会被控制
 
-1）首次
-
-2）更新
+demo
 
 3）一次只能运行一个版本，如何保证，什么机制（在开发时会导致一些问题，通过devTools解决）
-
-4）开发利器
-
-5）处理更新
 
 这样会造成一个问题：假如我们更新了index.html文件，用户看到的却还是之前的。
 
@@ -139,6 +133,14 @@ self.addEventListener('fetch', function(e) {
 ### service worker更新机制
 
 ### 开发与调试利器
+
+- 开发者工具
+
+![](./images/tools.png)
+
+- 监控
+
+chrome://inspect/#service-workers
 
 ### 问题：
 
@@ -178,20 +180,7 @@ self.addEventListener('fetch', function(e) {
         );
     });
 
-    demo
-
-    问题：
-    如果index.html想要更新，该如何处理？现在都是直接从service worker里读取缓存
-    如何更新呢？
-    最大的坑，如何更新页面数据
-
-    - 更新
-    - 加载更快
-    - 数据流
-    - 关闭浏览器后是否仍然可以运行
-
-    app cache 和 indexedDB API
-    https://developer.mozilla.org/en-US/Apps/Fundamentals/Basic_data_flow
+- 关闭浏览器后是否仍然可以运行
 
 ## 推送通知（push notifications）
 
@@ -216,7 +205,14 @@ self.addEventListener('fetch', function(e) {
 push service会接收网络请求，并对其进行校验，校验通过后，会给指定的浏览器推送一条消息。如果该浏览器是离线状态，这条消息会被存起来知道浏览器在线，再发送给浏览器。对于我们来说，无需关心到底使用的什么push service，只要保证按照协议[web push protocol](https://tools.ietf.org/html/draft-ietf-webpush-protocol-12)发起正确的请求即可。
 
 ```
- {"endpoint":"https://fcm.googleapis.com/fcm/send/elUUKjDMaOU:APA91bHTB6-7Bi9y_tTerk1zDLJ4LM9gap-Piyx5J2xQtBhpKrhNQueBq_-aA6KoH_-b0kWqR89Kthv_cZFGFJKkP47hq3b3MREqCLEth6WyhFljT4i206SIm60uBC20xpxj-C4xE-cf","expirationTime":null,"keys":{"p256dh":"BHMdMIHjLgkExjjiRlNYm5LLvS5_iVFJm9D-8-UKkoN3d8eo2vYOaQxhBHV_njD-M6zNr4davOffk5z63RiDy9Y=","auth":"JjwOuSFX5K051OCJSz2Igw=="}}
+{
+    "endpoint": "https://fcm.googleapis.com/fcm/send/elUUKjDMaOU:APA91bHTB6-7Bi9y_tTerk1zDLJ4LM9gap-Piyx5J2xQtBhpKrhNQueBq_-aA6KoH_-b0kWqR89Kthv_cZFGFJKkP47hq3b3MREqCLEth6WyhFljT4i206SIm60uBC20xpxj-C4xE-cf",
+    "expirationTime": null,
+    "keys": {
+        "p256dh": "BHMdMIHjLgkExjjiRlNYm5LLvS5_iVFJm9D-8-UKkoN3d8eo2vYOaQxhBHV_njD-M6zNr4davOffk5z63RiDy9Y=",
+        "auth": "JjwOuSFX5K051OCJSz2Igw=="
+    }
+}
 ```
 
 如上是一个PushSubscription的详细数据，其中endpoint是该浏览器所用的push service的地址。
@@ -325,10 +321,6 @@ manifest文件中定义了应用的名称，显示方式，开屏背景色，主
 **注意**
 
 在添加到主屏时，会检测是否注册了service worker，以及service worker是否做了离线缓存的处理，即是否监听了fetch事件。因此，service worker是使用添加主屏功能的前提条件。
-
-demo演示
-
-### 为什么，如何理解
 
 demo演示
 
