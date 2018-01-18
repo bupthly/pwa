@@ -59,7 +59,7 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 
 ## 离线缓存
 
-离线缓存，是指当用户访问页面时，我们可以控制将一些资源缓存到本地；这样，当用户处于弱网或无网状态时，就可以访问之前的缓存，提升用户体验。这一功能分为两大块：
+离线缓存，是指当用户访问页面时，我们可以控制将一些资源缓存到本地；这样，当用户处于弱网或无网状态时，就可以访问之前的缓存，提升用户体验。主要是两点：
 
 - 1）缓存资源；
 - 2）处理网络请求；
@@ -82,29 +82,11 @@ if ('serviceWorker' in navigator) {
 
 这个代码注册了一个service worker。在service worker内部，我们可以对一些事件进行监听，包括servcie worker生命周期、网络请求、push通知等。
 
-```
-self.addEventListener('install', e => {
-    // todo
-})
+![](./images/event.png)
 
-self.addEventListener('activate', e => {
-    // todo
-})
+如上图所示，实现离线缓存主要是对install和fetch两个事件的监听。
 
-self.addEventListener('fetch', e => {
-    // todo
-})
-
-self.addEventListener('push', e => {
-    // todo
-})
-
-...
-
-```
-
-
-下载完成后，浏览器会install该sw，sw的install事件会被触发，通常情况下，我们会在install时间中做一些针对静态资源文件的缓存处理
+sw文件下载完成后，浏览器会install该sw，sw的install事件会被触发，通常情况下，我们会在install事件中做一些针对静态资源文件的缓存处理。
 
 使用service worker缓存文件并拦截请求，提升离线体验
 
@@ -135,6 +117,9 @@ self.addEventListener('fetch', function(e) {
     )
 })
 ```
+
+静态资源文件更新了怎么处理？
+![](./images/wen.jpg)
 
 既然我们可以对文件进行缓存，那也就必然面临缓存失效的问题，更新被service worker缓存的静态文件，必须通过更新service worker的方法来解决。
 
