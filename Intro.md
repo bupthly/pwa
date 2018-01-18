@@ -59,9 +59,15 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 
 ## 离线缓存
 
-上文提到，sw生命周期中包含下载、安装、激活三个阶段：
+离线缓存，是指当用户访问页面时，我们可以控制将一些资源缓存到本地；这样，当用户处于弱网或无网状态时，就可以访问之前的缓存，提升用户体验。这一功能分为两大块：
 
-- 当在页面中注册一个sw时，会立即下载该sw文件
+- 1）缓存资源；
+- 2）处理网络请求；
+
+我们先看下缓存资源的处理：
+
+上文提到，sw生命周期中包含下载、安装、激活三个阶段。在使用service worker前，需要先进行注册，使用register方法。当在页面中注册一个sw时，会立即下载该sw文件。注册成功后，可以拿到一个ServiceWorkerRegistration对象，该对象包含sw的相关信息，包括所属的域等。
+
 ```
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
@@ -75,9 +81,9 @@ if ('serviceWorker' in navigator) {
     });
 }
 ```
-注册成功后，可以拿到一个ServiceWorkerRegistration对象，该对象包含sw的相关信息，包括所属的域等。
 
 - 下载完成后，浏览器会install该sw，sw的install事件会被触发，通常情况下，我们会在install时间中做一些针对静态资源文件的缓存处理
+
 
 
 使用service worker缓存文件并拦截请求，提升离线体验
