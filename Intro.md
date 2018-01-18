@@ -64,8 +64,6 @@ Service worker运行在worker上下文，因此它不能访问DOM。相对于驱
 - 1）缓存资源；
 - 2）处理网络请求；
 
-我们先看下缓存资源的处理：
-
 上文提到，sw生命周期中包含下载、安装、激活三个阶段。在使用service worker前，需要先进行注册，使用register方法。当在页面中注册一个sw时，会立即下载该sw文件。注册成功后，可以拿到一个ServiceWorkerRegistration对象，该对象包含sw的相关信息，包括所属的域等。
 
 ```
@@ -82,9 +80,31 @@ if ('serviceWorker' in navigator) {
 }
 ```
 
-- 下载完成后，浏览器会install该sw，sw的install事件会被触发，通常情况下，我们会在install时间中做一些针对静态资源文件的缓存处理
+这个代码注册了一个service worker。在service worker内部，我们可以对一些事件进行监听，包括servcie worker生命周期、网络请求、push通知等。
+
+```
+self.addEventListener('install', e => {
+    // todo
+})
+
+self.addEventListener('activate', e => {
+    // todo
+})
+
+self.addEventListener('fetch', e => {
+    // todo
+})
+
+self.addEventListener('push', e => {
+    // todo
+})
+
+...
+
+```
 
 
+下载完成后，浏览器会install该sw，sw的install事件会被触发，通常情况下，我们会在install时间中做一些针对静态资源文件的缓存处理
 
 使用service worker缓存文件并拦截请求，提升离线体验
 
@@ -139,10 +159,7 @@ self.addEventListener('fetch', function(e) {
         4）开发利器
         5）处理更新
 
-    - 注册
-    
-        
-
+    - 注册       
         1) service worker 作用域
         2）chrome://inspect/#service-workers 监控
     
